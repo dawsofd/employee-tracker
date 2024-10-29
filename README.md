@@ -36,3 +36,25 @@ THEN I am prompted to select an employee to update and their new role and this i
 The following video shows an example of the application being used from the command line:
 
 [![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
+
+## Walkthrough Video
+
+![Link to application walkthrough video]
+
+## Link to Deployed Application 
+![Link to Deployed Application]
+
+## Installation 
+
+```
+npm init -y
+npm install express 
+npm install inquirer@8.2.4
+npm install pg
+```
+
+## Usage
+
+```
+node server.js
+```
