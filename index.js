@@ -229,9 +229,47 @@ var employee_tracker = function() {
                     });
                 })
             });
-
-        } else if (answers.prompt === 'Delete an employee')
-
+        } else if (answers.prompt === 'Delete an employee') {
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'firstName',
+                    prompt: 'What is the first name of the new employee?',
+                    validate: firstNameInput => {
+                        if (firstNameInput) {
+                            return true;
+                        } else {
+                            console.log('Please provide a first name!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'lastName',
+                    prompt: 'What is the last name of the new employee?',
+                    validate: lastNameInput => {
+                        if (lastNameInput) {
+                            return: true;
+                        } else {
+                            console.log('Please provide a last name!');
+                            return false;
+                        }
+                    }
+                }
+                ]).then((answers) => {
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].last_name === answers.employee) {
+                            var name = result[i];
+                        }
+                    }
+                    pool.query(`DELETE FROM employees WHERE first_name = $1 AND last_name = $2`, [answers.firstName, answers.lastName], (err, {rows}) => {
+                        if (err) throw err;
+                        console.log(`Added ${answers.firstName} ${answers.lastName} to the database.`)
+                        employee_tracker();
+                    });
+                })
+            });
         } else if (answers.prompt === 'Exit') {
             pool.end();
             console.log("Good Bye!");
