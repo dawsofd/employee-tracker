@@ -48,7 +48,6 @@ The following video shows an example of the application being used from the comm
 
 ```
 npm init -y
-npm install express 
 npm install inquirer@8.2.4
 npm install pg
 ```
@@ -56,5 +55,5 @@ npm install pg
 ## Usage
 
 ```
-node server.js
+node index.js
 ```
