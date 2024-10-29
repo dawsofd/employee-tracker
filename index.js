@@ -133,7 +133,7 @@ var employee_tracker = function() {
                         prompt: 'What is the last name of the new employee?',
                         validate: lastNameInput => {
                             if (lastNameInput) {
-                                return: true;
+                                return true;
                             } else {
                                 console.log('Please provide a last name!');
                                 return false;
@@ -146,7 +146,7 @@ var employee_tracker = function() {
                         prompt: 'What is the role of the new employee?',
                         validate: roleInput => {
                             if (roleInput) {
-                                return: true;
+                                return true;
                             } else {
                                 console.log('Please provide a role!');
                                 return false;
@@ -159,7 +159,7 @@ var employee_tracker = function() {
                         prompt: 'Who manages the new employee?',
                         validate: managerInput = {
                             if (managerInput) {
-                                return: true;
+                                return true;
                             } else {
                                 console.log('Please provide a manager!');
                                 return false;
@@ -250,7 +250,7 @@ var employee_tracker = function() {
                     prompt: 'What is the last name of the new employee?',
                     validate: lastNameInput => {
                         if (lastNameInput) {
-                            return: true;
+                            return true;
                         } else {
                             console.log('Please provide a last name!');
                             return false;
