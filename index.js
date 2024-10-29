@@ -157,7 +157,7 @@ var employee_tracker = function() {
                         type: 'input',
                         name: 'manager',
                         prompt: 'Who manages the new employee?',
-                        validate: managerInput = {
+                        validate: managerInput => {
                             if (managerInput) {
                                 return true;
                             } else {
