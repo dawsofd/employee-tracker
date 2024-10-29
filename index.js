@@ -19,11 +19,6 @@ const pool = new Pool(
   )
   
   pool.connect();
-
-// Query database
-pool.query('SELECT * FROM employee', function (err, {rows}) {
-    console.log(rows);
-  });
   
 // Inquirer Input 
 var employee_tracker = function() {
