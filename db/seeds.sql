@@ -15,7 +15,7 @@ VALUES  ('Engineering'),
 INSERT INTO role (title, salary, department_id)
 VALUES  ('Software Engineer', 185000, 1),
         ('Product Manager', 165000, 1),
-        ('Engineering Manager', 200000, 1)
+        ('Engineering Manager', 200000, 1),
         ('Data Engineer', 185000, 2),
         ('Data Scientist', 120000, 2),
         ('Marketing Associate', 85000, 3),
@@ -49,7 +49,7 @@ VALUES  ('Abe', 'Smith', 1, 3),
         ('Clint', 'Carter', 14, 17),
         ('Nathaniel', 'Levy', 15, 17),
         ('Ivory', 'Leach', 16),
-        ('Tabatha' 'Gates', 17, 16);
+        ('Tabatha', 'Gates', 17, 16);
 
 
 
