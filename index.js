@@ -35,14 +35,18 @@ var employee_tracker = function() {
     }]).then((answers) => {
         if (answers.prompt === 'View all departments') {
             pool.query(`SELECT * FROM department`, (err,result) => {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 console.log("Showing all departments: ");
                 console.table(result);
                 employee_tracker();
             });
         } else if (answers.prompt === 'View department budget') {
             pool.query(`SELECT c.name as department_name, SUM(b.salary) as combined_salaries FROM employee as a JOIN role as b ON b.id = a.role_id JOIN department as c ON c.id = b.department_id GROUP BY 1 ORDER BY 1 asc`, (err, result) => {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 console.log("Showing combined salaries by department: ");
                 console.table(result);
                 employee_tracker();
@@ -62,14 +66,18 @@ var employee_tracker = function() {
                 }
             }]).then((answers) => {
                 pool.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, result) => {
-                  if (err) throw err;
+                  if (err) {
+                    console.log(err);
+                  }
                   console.log(`Added ${answers.department} to the datbase.`) 
                   employee_tracker(); 
                 });
             })
         } else if (answers.prompt === 'View all roles') {
             pool.query(`SELECT * FROM role`, (err, result) => {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 console.log("Showing all roles: ");
                 console.table(result);
                 employee_tracker();
@@ -89,21 +97,27 @@ var employee_tracker = function() {
                 }
             }]).then((answers) => {
                 pool.query(`INSERT INTO roles (name) VALUES (?)`, [answers.role], (err, result) => {
-                    if (err) throw err;
+                    if (err) {
+                        console.log(err);
+                    }
                     console.log(`Added ${answers.role} to the datbase.`)
                     employee_tracker();
                 });
             })
         } else if (answers.prompt === 'View all employees') {
             pool.query(`SELECT * FROM employee`, (err, result) => {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 console.log("Showing all employees: ");
                 console.table(result);
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new employee') {
             pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 inquirer.prompt([
                     {
                         type: 'input',
@@ -164,7 +178,9 @@ var employee_tracker = function() {
                         }
                     }
                     pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, role.id, answers.manager.id], (err, result) => {
-                        if (err) throw err;
+                        if (err) {
+                            console.log(err);
+                        }
                         console.log(`Added ${answers.firstName} ${answers.lastName} to the database.`)
                         employee_tracker();
                     });
@@ -172,7 +188,9 @@ var employee_tracker = function() {
             });
         } else if (answers.prompt === 'Update an employee role') {
             pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 inquirer.prompt([
                     {
                         type: 'list',
@@ -214,7 +232,9 @@ var employee_tracker = function() {
                     }
 
                     pool.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
-                        if (err) throw err;
+                        if (err) {
+                            console.log(err);
+                        }
                         console.log(`Updated ${answers.employee} role!`)
                         employee_tracker();
                     });
