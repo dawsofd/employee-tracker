@@ -40,7 +40,7 @@ var employee_tracker = function() {
        type: 'list',
        name: 'prompt',
        message: 'What would you like to do?',
-       choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add an employee', 'Update an employee role', 'Delete an employee', 'Exit']
+       choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add a new employee', 'Update an employee role', 'Delete an employee', 'Exit']
     }]).then((answers) => {
         if (answers.prompt === 'View all departments') {
             pool.query(`SELECT * FROM department`, (err,result) => {
@@ -83,6 +83,155 @@ var employee_tracker = function() {
                 console.table(result);
                 employee_tracker();
             });
+        } else if (answers.prompt === 'Add a new role') {
+            inquirer.prompt([{
+                type: 'input',
+                name: 'role',
+                prompt: 'What is the name of the new role?',
+                validate: roleInput => {
+                    if (roleInput) {
+                        return true;
+                    } else {
+                        console.log('Please add a role!');
+                        return false;
+                    }
+                }
+            }]).then((answers) => {
+                pool.query(`INSERT INTO roles (name) VALUES (?)`, [answers.role], (err, result) => {
+                    if (err) throw err;
+                    console.log(`Added ${answers.role} to the datbase.`)
+                    employee_tracker();
+                });
+            })
+        } else if (answers.prompt === 'View all employees') {
+            pool.query(`SELECT * FROM employee`, (err, result) => {
+                if (err) throw err;
+                console.log("Showing all employees: ");
+                console.table(result);
+                employee_tracker();
+            });
+        } else if (answers.prompt === 'Add a new employee') {
+            pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
+                if (err) throw err;
+                inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'firstName',
+                        prompt: 'What is the first name of the new employee?',
+                        validate: firstNameInput => {
+                            if (firstNameInput) {
+                                return true;
+                            } else {
+                                console.log('Please provide a first name!');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'lastName',
+                        prompt: 'What is the last name of the new employee?',
+                        validate: lastNameInput => {
+                            if (lastNameInput) {
+                                return: true;
+                            } else {
+                                console.log('Please provide a last name!');
+                                return false;
+                            }
+                        }
+                    },
+                    {   
+                        type: 'input',
+                        name: 'role',
+                        prompt: 'What is the role of the new employee?',
+                        validate: roleInput => {
+                            if (roleInput) {
+                                return: true;
+                            } else {
+                                console.log('Please provide a role!');
+                                return false;
+                            }
+                        }
+                    },
+                    {   
+                        type: 'input',
+                        name: 'manager',
+                        prompt: 'Who manages the new employee?',
+                        validate: managerInput = {
+                            if (managerInput) {
+                                return: true;
+                            } else {
+                                console.log('Please provide a manager!');
+                                return false;
+                            }
+                        }
+                    }
+                ]).then((answers) => {
+                    for (var i=0; i < result.length; i++) {
+                        if (result[i].title === answers.role) {
+                            var role = result[i];
+                        }
+                    }
+                    pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, role.id, answers.manager.id], (err, result) => {
+                        if (err) throw err;
+                        console.log(`Added ${answers.firstName} ${answers.lastName} to the database.`)
+                        employee_tracker();
+                    });
+                })
+            });
+        } else if (answers.prompt === 'Update an employee role') {
+            pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
+                if (err) throw err;
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'employee',
+                        message: 'Which employee would you like to update?',
+                        choices: () => {
+                            var array = [];
+                            for (var i = 0; i < result.length; i++) {
+                                array.push(result[i].last_name);
+                            }
+                            var employeeArray = [...new Set(array)];
+                            return employeeArray;
+                        }
+                    },
+                    {
+                        type: 'list',
+                        name: 'role',
+                        message: 'What is the new role?',
+                        choices: () => {
+                            var array = [];
+                            for (var i=0; i < result.length; i++) {
+                                array.push(result[i].title);
+                            }
+                            var newArray = [...new Set(array)];
+                            return newArray;
+                        }
+                    }
+                ]).then((answers) => {
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].last_name === answers.employee) {
+                            var name = result[i];
+                        }
+                    }
+
+                    for (var i=0; i < result.length; i++) {
+                        if (result[i].title === answers.role) {
+                            var role = result[i];
+                        }
+                    }
+
+                    pool.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                        if (err) throw err;
+                        console.log(`Updated ${answers.employee} role!`)
+                        employee_tracker();
+                    });
+                })
+            });
+
+        } else if (answers.prompt === 'Delete an employee')
+
         } else if (answers.prompt === 'Exit') {
             pool.end();
             console.log("Good Bye!");
