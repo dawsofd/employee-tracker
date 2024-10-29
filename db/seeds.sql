@@ -27,8 +27,8 @@ VALUES  ('Software Engineer', 185000, 1),
         ('Recruiter', 65000, 6),
         ('Human Resources Coordinator', 65000, 7),
         ('General Counsel', 175000, 8),
-        ('Customer Support Specialist', 65000, 9);
-        ('Chief Executive Officer', 300000, 10);
+        ('Customer Support Specialist', 65000, 9),
+        ('Chief Executive Officer', 300000, 10),
         ('Chief Operations Officer', 275000, 11);
 
 -- Employee
