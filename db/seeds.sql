@@ -1,3 +1,8 @@
+DO $$
+  DECLARE
+      -- Any variable declarations would go here
+  BEGIN
+
 -- Department
 INSERT INTO department (name)
 VALUES  ('Engineering'),
@@ -19,7 +24,7 @@ VALUES  ('Software Engineer', 185000, 1),
         ('Data Engineer', 185000, 2),
         ('Data Scientist', 120000, 2),
         ('Marketing Associate', 85000, 3),
-        ('Marketing Manager', 185000, 3)
+        ('Marketing Manager', 185000, 3),
         ('Brand Ambassador', 65000, 3),
         ('Account Manager', 90000, 4),
         ('Controller', 150000, 5),
@@ -48,8 +53,14 @@ VALUES  ('Abe', 'Smith', 1, 3),
         ('Connie', 'Sherman', 13, 17),
         ('Clint', 'Carter', 14, 17),
         ('Nathaniel', 'Levy', 15, 17),
-        ('Ivory', 'Leach', 16),
+        ('Ivory', 'Leach', 16, NULL),
         ('Tabatha', 'Gates', 17, 16);
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'An error occurred: %', SQLERRM; -- Log the error
+        ROLLBACK; -- Explicitly roll back changes in case of error
+END $$;
 
 
 
