@@ -25,15 +25,6 @@ pool.query('SELECT * FROM employee', function (err, {rows}) {
     console.log(rows);
   });
   
-  // Default response for any other request (Not Found)
-  app.use((req, res) => {
-    res.status(404).end();
-  });
-  
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-
 // Inquirer Input 
 var employee_tracker = function() {
     inquirer.prompt([{
@@ -225,47 +216,6 @@ var employee_tracker = function() {
                     pool.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
                         if (err) throw err;
                         console.log(`Updated ${answers.employee} role!`)
-                        employee_tracker();
-                    });
-                })
-            });
-        } else if (answers.prompt === 'Delete an employee') {
-            inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'firstName',
-                    prompt: 'What is the first name of the new employee?',
-                    validate: firstNameInput => {
-                        if (firstNameInput) {
-                            return true;
-                        } else {
-                            console.log('Please provide a first name!');
-                            return false;
-                        }
-                    }
-                },
-                {
-                    type: 'input',
-                    name: 'lastName',
-                    prompt: 'What is the last name of the new employee?',
-                    validate: lastNameInput => {
-                        if (lastNameInput) {
-                            return true;
-                        } else {
-                            console.log('Please provide a last name!');
-                            return false;
-                        }
-                    }
-                }
-                ]).then((answers) => {
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].last_name === answers.employee) {
-                            var name = result[i];
-                        }
-                    }
-                    pool.query(`DELETE FROM employees WHERE first_name = $1 AND last_name = $2`, [answers.firstName, answers.lastName], (err, {rows}) => {
-                        if (err) throw err;
-                        console.log(`Added ${answers.firstName} ${answers.lastName} to the database.`)
                         employee_tracker();
                     });
                 })
