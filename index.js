@@ -1,6 +1,8 @@
 // Dependencies
 const { Pool } = require('pg');
 const inquirer = require('inquirer');
+const cTable = require('console.table');
+const chalk = require('chalk');
 
 // DB Connection 
 const pool = new Pool(
@@ -15,7 +17,17 @@ const pool = new Pool(
   console.log('Connected to the employees_db database!')
   )
   
-  pool.connect();
+  pool.connect((err) => {
+    if (err) {
+        console.log(err);
+    }
+    console.log(chalk.yellow.bold(`====================================================================================`));
+    console.log(``);
+    console.log(`                                                          ` + chalk.greenBright.bold('Created By: Dawson Dohlen'));
+    console.log(``);
+    console.log(chalk.yellow.bold(`====================================================================================`));
+    employee_tracker();
+  });
   
 // Inquirer Input 
 var employee_tracker = function() {
@@ -238,5 +250,3 @@ var employee_tracker = function() {
         }
     })
 };
-
-employee_tracker();
