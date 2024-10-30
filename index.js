@@ -192,7 +192,7 @@ var employee_tracker = function() {
                         console.log(err);
                     }
                     console.log(``);
-                    console.log(chalk.greenBright(answers.first_name + answers.last_name + ` successfully added!`));
+                    console.log(chalk.greenBright(answers.firstName + ` successfully added!`));
                     console.log(``);
                     employee_tracker();
                 });
