@@ -246,7 +246,6 @@ var employee_tracker = function() {
                         employee_tracker();
                     });
                 })
-            });
         } else if (answers.prompt === 'Exit') {
             pool.end();
             console.log("Good Bye!");
