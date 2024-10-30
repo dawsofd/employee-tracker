@@ -238,8 +238,21 @@ var employee_tracker = function() {
                         }
                     }
                 },
+                {
+                    type: 'input',
+                    name: 'manager',
+                    message: 'What is the updated manager id?',
+                    validate: roleInput => {
+                        if (roleInput) {
+                            return true;
+                        } else {
+                             console.log('Please provide a manager id!');
+                            return false;
+                        }
+                    }
+                }
                 ]).then((answers) => {
-                    pool.query(`UPDATE employee SET role_id = $1 WHERE first_name = $2 AND last_name = $3`, [answers.role, answers.firstName, answers.lastName], (err, result) => {
+                    pool.query(`UPDATE employee SET role_id = $1, manager_id = $2 WHERE first_name = $3 AND last_name = $4`, [answers.role, answers.manager, answers.firstName, answers.lastName], (err, result) => {
                         if (err) {
                             console.log(err);
                         }
