@@ -187,7 +187,7 @@ var employee_tracker = function() {
                     }
                 }
             ]).then((answers) => {
-                pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`, [answers.firstName, answers.lastName, role.id, answers.manager.id], (err, result) => {
+                pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`, [answers.firstName, answers.lastName, answers.role, answers.manager], (err, result) => {
                     if (err) {
                         console.log(err);
                     }
@@ -198,10 +198,6 @@ var employee_tracker = function() {
                 });
             })
         } else if (answers.prompt === 'Update an employee role') {
-            pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                }
                 inquirer.prompt([
                     {
                         type: 'list',
