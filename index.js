@@ -263,7 +263,6 @@ var employee_tracker = function() {
         
                     });
                 })
-            });
         } else if (answers.prompt === 'Exit') {
             pool.end();
             console.log("Good Bye!");
