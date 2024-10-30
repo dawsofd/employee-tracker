@@ -76,11 +76,13 @@ var employee_tracker = function() {
                     }
                 }
             }]).then((answers) => {
-                pool.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, {rows}) => {
+                pool.query(`INSERT INTO department(name) VALUES($1)`, [answers.department], (err, result) => {
                   if (err) {
                     console.log(err);
                   }
-                  console.log(`Added ${answers.department} to the datbase.`) 
+                  console.log(``);
+                  console.log(chalk.greenBright(answers.department +` Department successfully created!`));
+                  console.log(``);
                   employee_tracker(); 
                 });
             })
@@ -109,11 +111,13 @@ var employee_tracker = function() {
                     }
                 }
             }]).then((answers) => {
-                pool.query(`INSERT INTO roles (name) VALUES (?)`, [answers.role], (err, result) => {
+                pool.query(`INSERT INTO roles(name) VALUES($1)`, [answers.role], (err, result) => {
                     if (err) {
                         console.log(err);
                     }
-                    console.log(`Added ${answers.role} to the datbase.`)
+                    console.log(``);
+                    console.log(chalk.greenBright(answers.role +` Role successfully created!`));
+                    console.log(``);
                     employee_tracker();
                 });
             })
@@ -129,78 +133,70 @@ var employee_tracker = function() {
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new employee') {
-            pool.query(`SELECT * FROM employee as a JOIN role as b on b.id = a.role_id`, (err, result) => {
-                if (err) {
-                    console.log(err);
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'firstName',
+                    prompt: 'What is the first name of the new employee?',
+                    validate: firstNameInput => {
+                        if (firstNameInput) {
+                            return true;
+                        } else {
+                            console.log('Please provide a first name!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'lastName',
+                    prompt: 'What is the last name of the new employee?',
+                    validate: lastNameInput => {
+                        if (lastNameInput) {
+                            return true;
+                        } else {
+                             console.log('Please provide a last name!');
+                            return false;
+                        }
+                    }
+                },
+                {   
+                    type: 'input',
+                    name: 'role',
+                    prompt: 'What is the role of the new employee? Identify using role_id.',
+                    validate: roleInput => {
+                        if (roleInput) {
+                            return true;
+                        } else {
+                            console.log('Please provide a valid role_id!');
+                            return false;
+                        }
+                    }
+                },
+                {   
+                    type: 'input',
+                    name: 'manager',
+                    prompt: 'Who manages the new employee? iIdentify using manager_id.',
+                    validate: managerInput => {
+                        if (managerInput) {
+                            return true;
+                        } else {
+                            console.log('Please provide a valid manager_id!');
+                            return false;
+                        }
+                    }
                 }
-                inquirer.prompt([
-                    {
-                        type: 'input',
-                        name: 'firstName',
-                        prompt: 'What is the first name of the new employee?',
-                        validate: firstNameInput => {
-                            if (firstNameInput) {
-                                return true;
-                            } else {
-                                console.log('Please provide a first name!');
-                                return false;
-                            }
-                        }
-                    },
-                    {
-                        type: 'input',
-                        name: 'lastName',
-                        prompt: 'What is the last name of the new employee?',
-                        validate: lastNameInput => {
-                            if (lastNameInput) {
-                                return true;
-                            } else {
-                                console.log('Please provide a last name!');
-                                return false;
-                            }
-                        }
-                    },
-                    {   
-                        type: 'input',
-                        name: 'role',
-                        prompt: 'What is the role of the new employee? Identify using role_id.',
-                        validate: roleInput => {
-                            if (roleInput) {
-                                return true;
-                            } else {
-                                console.log('Please provide a valid role_id!');
-                                return false;
-                            }
-                        }
-                    },
-                    {   
-                        type: 'input',
-                        name: 'manager',
-                        prompt: 'Who manages the new employee? iIdentify using manager_id.',
-                        validate: managerInput => {
-                            if (managerInput) {
-                                return true;
-                            } else {
-                                console.log('Please provide a valid manager_id!');
-                                return false;
-                            }
-                        }
+            ]).then((answers) => {
+                pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`, [answers.firstName, answers.lastName, role.id, answers.manager.id], (err, result) => {
+                    if (err) {
+                        console.log(err);
                     }
-                ]).then((answers) => {
-                    for (var i=0; i < result.length; i++) {
-                        if (result[i].title === answers.role) {
-                            var role = result[i];
-                        }
-                    }
-                    pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, role.id, answers.manager.id], (err, result) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        console.log(`Added ${answers.firstName} ${answers.lastName} in ${answers.role_id} managed by ${answers.manager_id} to the database.`)
-                        employee_tracker();
-                    });
-                })
-            });
+                    console.log(``);
+                    console.log(chalk.greenBright(answers.first_name + answers.last_name + ` successfully added!`));
+                    console.log(``);
+                    employee_tracker();
+                });
+            })
         } else if (answers.prompt === 'Update an employee role') {
             pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
                 if (err) {
