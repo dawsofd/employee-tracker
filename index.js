@@ -98,20 +98,48 @@ var employee_tracker = function() {
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new role') {
-            inquirer.prompt([{
-                type: 'input',
-                name: 'role',
-                prompt: 'What is the name of the new role?',
-                validate: roleInput => {
-                    if (roleInput) {
-                        return true;
-                    } else {
-                        console.log('Please add a role!');
-                        return false;
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'role',
+                    prompt: 'What is the title of the new role?',
+                    validate: roleInput => {
+                        if (roleInput) {
+                            return true;
+                        } else {
+                            console.log('Please add a role!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'salary',
+                    prompt: 'What is the salary for the new role?',
+                    validate: roleInput => {
+                        if (roleInput) {
+                            return true;
+                        } else {
+                            console.log('Please add a role!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'department',
+                    prompt: 'What is the department_id of the new role?',
+                    validate: roleInput => {
+                        if (roleInput) {
+                            return true;
+                        } else {
+                            console.log('Please add a department_id!');
+                            return false;
+                        }
                     }
                 }
-            }]).then((answers) => {
-                pool.query(`INSERT INTO role (title) VALUES($1)`, [answers.role], (err, result) => {
+            ]).then((answers) => {
+                pool.query(`INSERT INTO role (title, salary, department_id) VALUES($1, $2, $3)`, [answers.role, answers.salary, answers.department], (err, result) => {
                     if (err) {
                         console.log(err);
                     }
