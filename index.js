@@ -111,7 +111,7 @@ var employee_tracker = function() {
                     }
                 }
             }]).then((answers) => {
-                pool.query(`INSERT INTO roles(name) VALUES($1)`, [answers.role], (err, result) => {
+                pool.query(`INSERT INTO role(name) VALUES($1)`, [answers.role], (err, result) => {
                     if (err) {
                         console.log(err);
                     }
