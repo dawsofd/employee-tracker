@@ -51,12 +51,15 @@ var employee_tracker = function() {
                 employee_tracker();
             });
         } else if (answers.prompt === 'View department budget') {
-            pool.query(`SELECT c.name as department_name, SUM(b.salary) as combined_salaries FROM employee as a JOIN role as b ON b.id = a.role_id JOIN department as c ON c.id = b.department_id GROUP BY 1 ORDER BY 1 asc`, (err, result) => {
+            pool.query(`SELECT c.name as department_name, SUM(b.salary) as department_budget FROM employee as a JOIN role as b ON b.id = a.role_id JOIN department as c ON c.id = b.department_id GROUP BY 1 ORDER BY 1 asc`, (err, {rows}) => {
                 if (err) {
                     console.log(err);
                 }
-                console.log("Showing combined salaries by department: ");
-                console.table(result);
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(`                              ` + chalk.green.bold(`Budget as Combined Salaries by Department:`));
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(rows);
+                console.log(chalk.yellow.bold(`====================================================================================`));
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new department') {
@@ -73,7 +76,7 @@ var employee_tracker = function() {
                     }
                 }
             }]).then((answers) => {
-                pool.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, result) => {
+                pool.query(`INSERT INTO department (name) VALUES (?)`, [answers.department], (err, {rows}) => {
                   if (err) {
                     console.log(err);
                   }
@@ -82,12 +85,14 @@ var employee_tracker = function() {
                 });
             })
         } else if (answers.prompt === 'View all roles') {
-            pool.query(`SELECT * FROM role`, (err, result) => {
+            pool.query(`SELECT a.id as role_id, a.title as role_tile, b.name as department_name FROM role as a JOIN department as b ON b.id = a.department_id`, (err, {rows}) => {
                 if (err) {
                     console.log(err);
                 }
-                console.log("Showing all roles: ");
-                console.table(result);
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(`                              ` + chalk.green.bold(`Current Employee Roles:`));
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(rows);
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new role') {
