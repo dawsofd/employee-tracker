@@ -44,7 +44,7 @@ var employee_tracker = function() {
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new department') {
-            inqurier.prompt([{
+            inquirer.prompt([{
                 type: 'input',
                 name: 'department',
                 prompt: 'What is the name of the new department?',
