@@ -54,6 +54,20 @@ npm install pg
 
 ## Usage
 
+To load data, run the following command in Assets/db directory: 
+
+```
+psql -U postgres
+```
+
+Once connected to the postgres server, run the following commands to create and seed the database:
+
+```
+\i schema.sql
+\i seeds.sql
+
+To run the application, navigate back to the the parent directory and run:
+
 ```
 node index.js
 ```
