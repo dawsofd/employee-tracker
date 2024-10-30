@@ -39,10 +39,7 @@ The following video shows an example of the application being used from the comm
 
 ## Walkthrough Video
 
-![Link to application walkthrough video]
-
-## Link to Deployed Application 
-![Link to Deployed Application]
+![Link to application walkthrough video]()
 
 ## Installation 
 
