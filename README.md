@@ -37,9 +37,12 @@ The following video shows an example of the application being used from the comm
 
 [![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
 
+## Application Preview
+![Walkthrough Video GIF](./Assets/employee-tracker-walkthrough.gif)
+
 ## Walkthrough Video
 
-![Link to application walkthrough video]()
+![Link to application walkthrough video](https://drive.google.com/file/d/1uMWGN8TZsPXI-0TnMoI7hho89AAF-A2O/view)
 
 ## Installation 
 
