@@ -297,7 +297,7 @@ var employee_tracker = function() {
                                 console.log(err);
                             }
                             console.log(``);
-                            console.log(chalk.greenBright(answers.firstName + `deleted!`));
+                            console.log(chalk.greenBright(answers.firstName + ` deleted!`));
                             console.log(``);
                             employee_tracker();
         
