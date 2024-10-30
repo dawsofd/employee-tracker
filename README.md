@@ -50,6 +50,8 @@ The following video shows an example of the application being used from the comm
 npm init -y
 npm install inquirer@8.2.4
 npm install pg
+npm install chalk@4.1.2
+npm install figlet
 ```
 
 ## Usage

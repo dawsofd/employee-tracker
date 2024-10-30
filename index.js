@@ -1,8 +1,8 @@
 // Dependencies
 const { Pool } = require('pg');
 const inquirer = require('inquirer');
-const cTable = require('console.table');
 const chalk = require('chalk');
+const figlet = require('figlet');
 
 // DB Connection 
 const pool = new Pool(
@@ -17,12 +17,13 @@ const pool = new Pool(
   console.log('Connected to the employees_db database!')
   )
   
-  pool.connect((err) => {
-    if (err) {
-        console.log(err);
+  pool.connect((error) => {
+    if (error) {
+        console.log(error);
     }
     console.log(chalk.yellow.bold(`====================================================================================`));
     console.log(``);
+    console.log(chalk.greenBright.bold(figlet.textSync('Employee Tracker')));
     console.log(`                                                          ` + chalk.greenBright.bold('Created By: Dawson Dohlen'));
     console.log(``);
     console.log(chalk.yellow.bold(`====================================================================================`));
@@ -38,12 +39,15 @@ var employee_tracker = function() {
        choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add a new employee', 'Update an employee role', 'Delete an employee', 'Exit']
     }]).then((answers) => {
         if (answers.prompt === 'View all departments') {
-            pool.query(`SELECT * FROM department`, (err,result) => {
+            pool.query(`SELECT department.id as department_id, department.name as department_name FROM department`, (err, {rows}) => {
                 if (err) {
                     console.log(err);
                 }
-                console.log("Showing all departments: ");
-                console.table(result);
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(`                              ` + chalk.green.bold(`All Departments:`));
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(rows);
+                console.log(chalk.yellow.bold(`====================================================================================`));
                 employee_tracker();
             });
         } else if (answers.prompt === 'View department budget') {
