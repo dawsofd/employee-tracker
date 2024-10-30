@@ -36,7 +36,7 @@ var employee_tracker = function() {
        type: 'list',
        name: 'prompt',
        message: 'What would you like to do?',
-       choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add a new employee', 'Update an employee role', 'Delete an employee', 'Exit']
+       choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add a new employee', 'Update an employee role', 'Exit']
     }]).then((answers) => {
         if (answers.prompt === 'View all departments') {
             pool.query(`SELECT department.id as department_id, department.name as department_name FROM department`, (err, {rows}) => {
@@ -118,16 +118,18 @@ var employee_tracker = function() {
                 });
             })
         } else if (answers.prompt === 'View all employees') {
-            pool.query(`SELECT * FROM employee`, (err, result) => {
+            pool.query(`SELECT a.first_name as first_name, a.last_name as last_name, b.title as role, b.salary as salary, c.name as department_name, d.first_name as manager_first_name, d.last_name as manager_last_name FROM employee as a JOIN role as b ON b.id = a.role_id JOIN department as c ON c.id = b.department_id LEFT JOIN employee as d ON d.id = a.manager_id `, (err, {rows}) => {
                 if (err) {
                     console.log(err);
                 }
-                console.log("Showing all employees: ");
-                console.table(result);
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(`                              ` + chalk.green.bold(`All employees:`));
+                console.log(chalk.yellow.bold(`====================================================================================`));
+                console.log(rows);
                 employee_tracker();
             });
         } else if (answers.prompt === 'Add a new employee') {
-            pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
+            pool.query(`SELECT * FROM employee as a JOIN role as b on b.id = a.role_id`, (err, result) => {
                 if (err) {
                     console.log(err);
                 }
@@ -161,12 +163,12 @@ var employee_tracker = function() {
                     {   
                         type: 'input',
                         name: 'role',
-                        prompt: 'What is the role of the new employee?',
+                        prompt: 'What is the role of the new employee? Identify using role_id.',
                         validate: roleInput => {
                             if (roleInput) {
                                 return true;
                             } else {
-                                console.log('Please provide a role!');
+                                console.log('Please provide a valid role_id!');
                                 return false;
                             }
                         }
@@ -174,12 +176,12 @@ var employee_tracker = function() {
                     {   
                         type: 'input',
                         name: 'manager',
-                        prompt: 'Who manages the new employee?',
+                        prompt: 'Who manages the new employee? iIdentify using manager_id.',
                         validate: managerInput => {
                             if (managerInput) {
                                 return true;
                             } else {
-                                console.log('Please provide a manager!');
+                                console.log('Please provide a valid manager_id!');
                                 return false;
                             }
                         }
@@ -194,7 +196,7 @@ var employee_tracker = function() {
                         if (err) {
                             console.log(err);
                         }
-                        console.log(`Added ${answers.firstName} ${answers.lastName} to the database.`)
+                        console.log(`Added ${answers.firstName} ${answers.lastName} in ${answers.role_id} managed by ${answers.manager_id} to the database.`)
                         employee_tracker();
                     });
                 })
@@ -221,7 +223,7 @@ var employee_tracker = function() {
                     {
                         type: 'list',
                         name: 'role',
-                        message: 'What is the new role?',
+                        message: 'What is the new role? Identify using role_id.',
                         choices: () => {
                             var array = [];
                             for (var i=0; i < result.length; i++) {
