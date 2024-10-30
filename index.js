@@ -198,6 +198,10 @@ var employee_tracker = function() {
                 });
             })
         } else if (answers.prompt === 'Update an employee role') {
+            pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
+                if (err) {
+                    console.log(err);
+                }
                 inquirer.prompt([
                     {
                         type: 'list',
@@ -215,7 +219,7 @@ var employee_tracker = function() {
                     {
                         type: 'list',
                         name: 'role',
-                        message: 'What is the new role? Identify using role_id.',
+                        message: 'What is the new role?',
                         choices: () => {
                             var array = [];
                             for (var i=0; i < result.length; i++) {
@@ -226,26 +230,18 @@ var employee_tracker = function() {
                         }
                     }
                 ]).then((answers) => {
-                    for (var i = 0; i < result.length; i++) {
-                        if (result[i].last_name === answers.employee) {
-                            var name = result[i];
-                        }
-                    }
-
-                    for (var i=0; i < result.length; i++) {
-                        if (result[i].title === answers.role) {
-                            var role = result[i];
-                        }
-                    }
-
-                    pool.query(`UPDATE employee SET ? WHERE ?`, [{role_id: role}, {last_name: name}], (err, result) => {
+                    pool.query(`UPDATE employee SET role_id = $1 WHERE last_name = $2`, [answers.role, answers.employee], (err, result) => {
                         if (err) {
                             console.log(err);
                         }
-                        console.log(`Updated ${answers.employee} role!`)
+                        console.log(``);
+                        console.log(chalk.greenBright(answers.employee + ` role updated!`));
+                        console.log(``);
                         employee_tracker();
+        
                     });
                 })
+            });
         } else if (answers.prompt === 'Exit') {
             pool.end();
             console.log("Good Bye!");
