@@ -198,44 +198,53 @@ var employee_tracker = function() {
                 });
             })
         } else if (answers.prompt === 'Update an employee role') {
-            pool.query(`SELECT * FROM employee as a JOIN role as b ON b.id = a.role_id`, (err, result) => {
-                if (err) {
-                    console.log(err);
-                }
-                inquirer.prompt([
-                    {
-                        type: 'list',
-                        name: 'employee',
-                        message: 'Which employee would you like to update?',
-                        choices: () => {
-                            var array = [];
-                            for (var i = 0; i < result.length; i++) {
-                                array.push(result[i].last_name);
-                            }
-                            var employeeArray = [...new Set(array)];
-                            return employeeArray;
-                        }
-                    },
-                    {
-                        type: 'list',
-                        name: 'role',
-                        message: 'What is the new role?',
-                        choices: () => {
-                            var array = [];
-                            for (var i=0; i < result.length; i++) {
-                                array.push(result[i].title);
-                            }
-                            var newArray = [...new Set(array)];
-                            return newArray;
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'firstName',
+                    message: 'What is the first name of the employee would you like to update?',
+                    validate: firstNameInput => {
+                        if (firstNameInput) {
+                            return true;
+                        } else {
+                            console.log('Please provide a first name!');
+                            return false;
                         }
                     }
+                },
+                {
+                    type: 'input',
+                    name: 'lastName',
+                    message: 'What is the last name of the employee would you like to update?',
+                    validate: lastNameInput => {
+                        if (lastNameInput) {
+                            return true;
+                        } else {
+                             console.log('Please provide a last name!');
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'input',
+                    name: 'role',
+                    message: 'What is the updated role id?',
+                    validate: roleInput => {
+                        if (roleInput) {
+                            return true;
+                        } else {
+                             console.log('Please provide a role id!');
+                            return false;
+                        }
+                    }
+                },
                 ]).then((answers) => {
-                    pool.query(`UPDATE employee SET role_id = $1 WHERE last_name = $2`, [answers.role, answers.employee], (err, result) => {
+                    pool.query(`UPDATE employee SET role_id = $1 WHERE first_name = $2 AND last_name = $3`, [answers.role, answers.firstName, answers.lastName], (err, result) => {
                         if (err) {
                             console.log(err);
                         }
                         console.log(``);
-                        console.log(chalk.greenBright(answers.employee + ` role updated!`));
+                        console.log(chalk.greenBright(answers.firstName + ` role updated!`));
                         console.log(``);
                         employee_tracker();
         
