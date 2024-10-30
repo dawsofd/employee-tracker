@@ -1,8 +1,5 @@
 // Dependencies
 const { Pool } = require('pg');
-
-const PORT = process.env.PORT || 3001;
-
 const inquirer = require('inquirer');
 
 // DB Connection 
@@ -241,3 +238,5 @@ var employee_tracker = function() {
         }
     })
 };
+
+employee_tracker();
