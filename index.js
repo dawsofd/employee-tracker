@@ -36,7 +36,7 @@ var employee_tracker = function() {
        type: 'list',
        name: 'prompt',
        message: 'What would you like to do?',
-       choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add a new employee', 'Update an employee role', 'Exit']
+       choices: ['View all departments', 'View department budget', 'Add a new department', 'View all roles', 'Add a new role', 'View all employees', 'Add a new employee', 'Update an employee role', 'Delete an employee', 'Exit']
     }]).then((answers) => {
         if (answers.prompt === 'View all departments') {
             pool.query(`SELECT department.id as department_id, department.name as department_name FROM department`, (err, {rows}) => {
@@ -215,7 +215,7 @@ var employee_tracker = function() {
                 {
                     type: 'input',
                     name: 'lastName',
-                    message: 'What is the last name of the employee would you like to update?',
+                    message: 'What is the last name of the employee to update?',
                     validate: lastNameInput => {
                         if (lastNameInput) {
                             return true;
@@ -228,7 +228,7 @@ var employee_tracker = function() {
                 {
                     type: 'input',
                     name: 'role',
-                    message: 'What is the updated role id?',
+                    message: 'What is the new role id?',
                     validate: roleInput => {
                         if (roleInput) {
                             return true;
@@ -263,9 +263,49 @@ var employee_tracker = function() {
         
                     });
                 })
-        } else if (answers.prompt === 'Exit') {
-            pool.end();
-            console.log("Good Bye!");
-        }
-    })
-};
+            } else if (answers.prompt === 'Delete an employee') {
+                inquirer.prompt([
+                    {
+                        type: 'input',
+                        name: 'firstName',
+                        message: 'What is the first name of the employee to delete?',
+                        validate: firstNameInput => {
+                            if (firstNameInput) {
+                                return true;
+                            } else {
+                                console.log('Please provide a first name!');
+                                return false;
+                            }
+                        }
+                    },
+                    {
+                        type: 'input',
+                        name: 'lastName',
+                        message: 'What is the last name of the employee to delete?',
+                        validate: lastNameInput => {
+                            if (lastNameInput) {
+                                return true;
+                            } else {
+                                 console.log('Please provide a last name!');
+                                return false;
+                            }
+                        }
+                    }
+                    ]).then((answers) => {
+                        pool.query(`DELETE FROM employee WHERE first_name = $1 AND last_name = $2`, [answers.firstName, answers.lastName], (err, result) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                            console.log(``);
+                            console.log(chalk.greenBright(answers.firstName + `deleted!`));
+                            console.log(``);
+                            employee_tracker();
+        
+                    });
+                })
+            } else if (answers.prompt === 'Exit') {
+                pool.end();
+                console.log("Good Bye!");
+            }
+        })
+    };
